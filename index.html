@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>First Village Mart</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #e6f2ff;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .header h1 {
+      font-size: 24px;
+      margin: 0;
+      font-weight: 600;
+    }
+    .back-btn {
+      position: absolute;
+      left: 10px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .back-btn img { width: 28px; height: 28px; }
+
+    .bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #fff;
+      box-shadow: 0 -1px 3px rgba(0,0,0,0.05);
+      font-size: 16px;
+    }
+    .location {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .location img { width: 24px; }
+    .cart-btn {
+      position: relative;
+      cursor: pointer;
+    }
+    .cart-btn img { width: 28px; }
+    .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -10px;
+      background: red;
+      color: white;
+      font-size: 13px;
+      border-radius: 50%;
+      padding: 3px 7px;
+    }
+
+    .category-section { padding: 20px; }
+    .category-section h2 {
+      margin-bottom: 15px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .category-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      padding-bottom: 15px;
+    }
+    .category-icon {
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .circle-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 6px;
+      background-color: #b3daff;
+    }
+    .circle-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .category-icon span {
+      font-size: 13px;
+      font-weight: 500;
+      display: block;
+    }
+
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      padding: 20px;
+    }
+    .product-card {
+      background: #ffffff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    .product-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .product-card h3 {
+      font-size: 16px;
+      margin: 10px 0 5px;
+      font-weight: 600;
+    }
+    .product-card p {
+      font-size: 13px;
+      margin: 4px 0;
+    }
+    .actions {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .add-to-cart-btn, .order-now-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .order-now-btn {
+      background-color: #28a745;
+    }
+
+    .cart-modal {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      width: 300px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 15px;
+      z-index: 999;
+      display: none;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .cart-item img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .cart-item-info {
+      flex: 1;
+    }
+    .cart-item-info p {
+      margin: 2px 0;
+      font-size: 13px;
+      font-weight: 400;
+    }
+    .remove-btn {
+      background: red;
+      color: white;
+      border: none;
+      padding: 4px 6px;
+      font-size: 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .place-order {
+      margin-top: 10px;
+      background: #ff9900;
+      color: white;
+      border: none;
+      padding: 8px;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <button class="back-btn" onclick="goBack()">
+      <img src="https://img.icons8.com/ios-filled/50/000000/back.png" alt="Back">
+    </button>
+    <h1>First Village Mart</h1>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="location">
+      <img src="https://img.icons8.com/ios-filled/50/000000/marker.png" alt="Location">
+      <span id="display-location">Detecting location...</span>
+    </div>
+    <div class="cart-btn" onclick="toggleCart()">
+      <img src="https://img.icons8.com/ios-filled/50/000000/shopping-cart.png" alt="Cart">
+      <div class="cart-count" id="cart-count">0</div>
+    </div>
+  </div>
+
+  <div class="cart-modal" id="cart-modal"></div>
+
+  <section class="category-section">
+    <h2>Groceries</h2>
+    <div class="category-scroll" id="category-list"></div>
+  </section>
+
+  <section class="product-list" id="product-list"></section>
+
+  <script>
+    function goBack() {
+      window.location.href = 'index.html';
+    }
+
+    async function fetchLocationName(lat, lon) {
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+      const data = await res.json();
+      const village = data.address.village || data.address.suburb || data.address.town || data.address.city || "Unknown";
+      const state = data.address.state || "Unknown State";
+      document.getElementById("display-location").textContent = `${village}, ${state}`;
+    }
+
+    function detectLocation() {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            fetchLocationName(lat, lon);
+          },
+          () => {
+            document.getElementById("display-location").textContent = "Location unavailable";
+          }
+        );
+      } else {
+        document.getElementById("display-location").textContent = "Geolocation not supported";
+      }
+    }
+
+    const categories = [
+      { key: 'all', label: 'All', img: 'bg1.png' },
+      ...Array.from({ length: 12 }, (_, i) => ({
+        key: `cat${i+1}`,
+        label: `Category ${i+1}`,
+        img: `bg${i+1}.png`
+      }))
+    ];
+
+    const products = {};
+    let productIndex = 1;
+    categories.forEach(cat => {
+      if (cat.key !== 'all') {
+        products[cat.key] = Array.from({ length: 6 }, (_, i) => ({
+          name: `${cat.label} Item ${i+1}`,
+          img: `p${productIndex++}.png`,
+          desc: `Description for ${cat.label} Item ${i+1}`,
+          price: 50 + i * 10,
+          discount: 5 + i * 3
+        }));
+      }
+    });
+    products['all'] = Object.values(products).flat();
+
+    let cart = [];
+
+    function updateCartCount() {
+      document.getElementById('cart-count').textContent = cart.length;
+    }
+
+    function addToCart(item) {
+      cart.push(item);
+      updateCartCount();
+      renderCart();
+      alert(`${item.name} added to cart!`);
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartCount();
+      renderCart();
+    }
+
+    function toggleCart() {
+      const modal = document.getElementById('cart-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+      renderCart();
+    }
+
+    function renderCart() {
+      const modal = document.getElementById('cart-modal');
+      modal.innerHTML = '';
+      cart.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <div class="cart-item-info">
+            <p><strong>${item.name}</strong></p>
+            <p>₹${item.price} (${item.discount}% OFF)</p>
+            <p>${item.desc}</p>
+          </div>
+          <button class="remove-btn" onclick="removeFromCart(${idx})">X</button>
+        `;
+        modal.appendChild(div);
+      });
+      if (cart.length > 0) {
+        modal.innerHTML += `<button class="place-order" onclick="placeOrder()">Place Order</button>`;
+      }
+    }
+
+    function placeOrder() {
+      window.location.href = 'order.html';
+    }
+
+    const categoryContainer = document.getElementById('category-list');
+    const productContainer = document.getElementById('product-list');
+
+    categories.forEach(cat => {
+      const div = document.createElement('div');
+      div.className = 'category-icon';
+      div.onclick = () => showProducts(cat.key);
+      div.innerHTML = `
+        <div class="circle-img"><img src="${cat.img}" alt="${cat.label}"></div>
+        <span>${cat.label}</span>
+      `;
+      categoryContainer.appendChild(div);
+    });
+
+    function showProducts(key) {
+      productContainer.innerHTML = '';
+      if (!products[key]) return;
+      products[key].forEach(prod => {
+        const item = document.createElement('div');
+        item.className = 'product-card';
+        item.innerHTML = `
+          <img src="${prod.img}" alt="${prod.name}">
+          <h3>${prod.name}</h3>
+          <p>${prod.desc}</p>
+          <p><strong>₹${prod.price}</strong> (${prod.discount}% OFF)</p>
+          <div class="actions">
+            <button class="add-to-cart-btn" onclick='addToCart(${JSON.stringify(prod)})'>Add to Cart</button>
+            <button class="order-now-btn" onclick="window.location.href='order.html'">Order Now</button>
+          </div>
+        `;
+        productContainer.appendChild(item);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      detectLocation();
+      showProducts('all');
+    });
+  </script>
+</body>
+</html>
